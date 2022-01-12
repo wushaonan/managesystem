@@ -1,0 +1,2 @@
+# managesystem
+使用springboot，thymeleaf和jap开的一套管理系统
