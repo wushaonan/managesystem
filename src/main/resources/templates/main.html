@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主界面</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            width: 800px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        ul li {
+            position: relative;
+            float: left;
+            list-style: none;
+            background-color: deepskyblue;
+            color: black;
+            box-shadow: 1px 2px 8px darkgrey;
+            width: 19.5%;
+        }
+
+        ul li a {
+            text-decoration: none;
+        }
+
+        ul li:hover {
+            background-color: skyblue;
+        }
+        .table-c table{
+            border-right:1px solid #0055ff;border-bottom:1px solid #0055ff;
+            margin:0 auto;
+        }
+        .table-c table td{border-left:1px solid #0055ff;border-top:1px solid #0055ff;
+            text-align: center
+        }
+        .table-c table th{border-left:1px solid #0055ff;border-top:1px solid #0055ff
+        }
+        .addAccount {
+            margin-bottom:30px;
+            margin-left: 30px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!--<div class="table-c" >-->
+<div class="container-main right-panel-active">
+<!--    <div class="container_from container_signin">-->
+    <div class="addAccount">
+        <a href="addAccountPage">新增账户</a> <a href="animalList" style="margin-left: 30px">动物管理</a> <a href="relationList" style="margin-left: 30px">授权管理</a>
+        <span th:text="${msg}" style=" margin-left: 30px; text-align:center;color: red"></span>
+    </div>
+    <div class="table-c">
+        <table  width="1100" border="0" cellspacing="1" cellpadding="0">
+            <tr>
+                <th th:width="50">ID</th>
+                <th th:width="100">账号</th>
+                <th th:width="100">姓名</th>
+                <th th:width="150">单位</th>
+                <th th:width="100">手机号</th>
+                <th th:width="100" >EMAIL</th>
+                <th th:width="100" >创建时间</th>
+                <th th:width="100" >更新时间</th>
+                <th th:width="100">操作</th>
+            </tr>
+            <tr th:each="account : ${accountList}">
+                <td th:width="50" th:text="${account.id}"></td>
+                <td th:width="100" th:text="${account.account}"></td>
+                <td th:width="100" th:text="${account.userName}"></td>
+                <td th:width="150" th:text="${account.company}"></td>
+                <td th:width="100" th:text="${account.mobile}"></td>
+                <td th:width="100" th:text="${account.email}"></td>
+                <td th:width="100" th:text="${account.createDateStr}"></td>
+                <td th:width="100" th:text="${account.updateDateStr}"></td>
+                <td th:width="100"><a th:href="@{editAccountPage(id=${account.id})}">编辑</a> <a th:href="@{deleteAccount(id=${account.id})}" style="margin-left: 10px">删除</a></td>
+            </tr>
+        </table>
+    </div>
+
+<!--    </div>-->
+</div>
+<!--记得要下载jquery-->
+<script src="../static/jquery-3.6.0.min.js"></script>
+</body>
+</html>

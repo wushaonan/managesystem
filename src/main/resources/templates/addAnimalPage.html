@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增动物</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .addAccount {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<!-- 整体布局 -->
+<div class="container right-panel-active">
+
+    <div class="container_from container_signin">
+        <div class="addAccount">
+            <a href="animalList" style="margin-left: 30px;">返回</a>
+            <span th:text="${msg}" style=" margin-left: 30px; text-align:center;color: red"></span>
+        </div>
+        <form class="from" id="from2" method="post" th:action="@{/manage/addOrEditAnimal}">
+            <input type="text" name="animalName" placeholder="请输入动物名字" class="input" required="required">
+            <input type="submit" class="btn" value="保存"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>
