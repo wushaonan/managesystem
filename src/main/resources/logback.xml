@@ -27,6 +27,12 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
             <fileNamePattern>${LOG_PATH}/manageservice-info.%d.log</fileNamePattern>
+            <!-- 日志最大的历史 30天 -->
+            <maxHistory>15</maxHistory>
+            <!--控制所有归档日志文件的总大小-->
+            <totalSizeCap>5GB</totalSizeCap>
+            <!--是否在应用启动的时候删除历史日志-->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
     </appender>
 
@@ -44,6 +50,12 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
             <fileNamePattern>${LOG_PATH}/manageservice-error.%d.log</fileNamePattern>
+            <!-- 日志最大的历史 30天 -->
+            <maxHistory>15</maxHistory>
+            <!--控制所有归档日志文件的总大小-->
+            <totalSizeCap>5GB</totalSizeCap>
+            <!--是否在应用启动的时候删除历史日志-->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
     </appender>
 
