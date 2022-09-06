@@ -2,6 +2,8 @@ package com.sn.manageservice.repostory;
 
 import com.sn.manageservice.pojo.Account;
 import com.sn.manageservice.pojo.Animal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,6 @@ import java.util.List;
 public interface AnimalRepository extends JpaRepository<Animal, Integer> {
 
     List<Animal> findAnimalByAnimalName(String animalName);
+
+    Page<Animal> findAll(Pageable pageable);
 }
