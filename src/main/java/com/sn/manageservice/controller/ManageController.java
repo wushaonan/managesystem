@@ -17,10 +17,19 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,7 +110,7 @@ public class ManageController {
                 return "login";
             }
             session.setAttribute("userName", user.getUserName());
-            return "redirect:/manage/main";
+            return "redirect:/manage/main?currentPage=1";
         } else {
             model.addAttribute("msg", "账号或者密码有误");
             return "login";
@@ -109,9 +118,12 @@ public class ManageController {
     }
 
 
-    @GetMapping("main")
-    public String main(Model model) {
-        List<Account> accounts = accountRepository.findAll();
+    @GetMapping("/main")
+    public String main(Integer currentPage, Model model) {
+
+        Pageable pageable = PageRequest.of(currentPage - 1, 2, Sort.Direction.DESC, "updateDate");
+        Page<Account> accountPage = accountRepository.findAll(pageable);
+        List<Account> accounts = accountPage.getContent();
         List<AccountVo> accountVos = new ArrayList<>();
         for (Account account : accounts) {
             AccountVo accountVo = new AccountVo();
@@ -121,12 +133,18 @@ public class ManageController {
             accountVos.add(accountVo);
         }
         model.addAttribute("accountList", accountVos);
+        model.addAttribute("totalPages", accountPage.getTotalPages());
+        model.addAttribute("totalItems", accountPage.getTotalElements());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("size", accountPage.getSize());
         return "main";
     }
 
     @GetMapping("animalList")
-    public String animalList(Model model) {
-        List<Animal> animals = animalRepository.findAll();
+    public String animalList(Integer currentPage, Model model) {
+        Pageable pageable = PageRequest.of(currentPage - 1, 2, Sort.Direction.DESC, "updateDate");
+        Page<Animal> animalPage = animalRepository.findAll(pageable);
+        List<Animal> animals = animalPage.getContent();
         List<AnimalVo> animalVos = new ArrayList<>();
         for (Animal animal : animals) {
             AnimalVo animalVo = new AnimalVo();
@@ -137,12 +155,27 @@ public class ManageController {
             animalVos.add(animalVo);
         }
         model.addAttribute("animalList", animalVos);
+        model.addAttribute("totalPages", animalPage.getTotalPages());
+        model.addAttribute("totalItems", animalPage.getTotalElements());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("size", animalPage.getSize());
         return "animal";
     }
 
     @GetMapping("relationList")
-    public String relationList(Model model) {
-        List<Relation> relations = relationRepository.findAll();
+    public String relationList(Integer currentPage, Integer accountId, Integer animalId, Model model) {
+        Pageable pageable = PageRequest.of(currentPage - 1, 2, Sort.Direction.DESC, "updateDate");
+        Page<Relation> relationPage = null;
+        if (Objects.nonNull(accountId)){
+            model.addAttribute("accountId", accountId);
+            relationPage = relationRepository.findRelationByAccountId(pageable, accountId);
+        }else if (Objects.nonNull(animalId)){
+            model.addAttribute("animalId", animalId);
+            relationPage = relationRepository.findRelationByAnimalId(pageable, animalId);
+        }else {
+            relationPage = relationRepository.findAll(pageable);
+        }
+        List<Relation> relations = relationPage.getContent();
         List<RelationVo> relationVos = new ArrayList<>();
         for (Relation relation : relations) {
             RelationVo relationVo = new RelationVo();
@@ -160,6 +193,10 @@ public class ManageController {
             relationVos.add(relationVo);
         }
         model.addAttribute("relationList", relationVos);
+        model.addAttribute("totalPages", relationPage.getTotalPages());
+        model.addAttribute("totalItems", relationPage.getTotalElements());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("size", relationPage.getSize());
         return "relation";
     }
 
@@ -210,7 +247,7 @@ public class ManageController {
         }
         relation.setUpdateDate(new Date());
         relationRepository.saveAndFlush(relation);
-        return "redirect:/manage/relationList";
+        return "redirect:/manage/relationList?currentPage=1";
 
     }
 
@@ -238,7 +275,7 @@ public class ManageController {
         animal.setUpdateDate(new Date());
         animal.setAnimalName(animalParam.getAnimalName());
         animalRepository.saveAndFlush(animal);
-        return "redirect:/manage/animalList";
+        return "redirect:/manage/animalList?currentPage=1";
     }
 
     @PostMapping("addOrEditAccount")
@@ -261,7 +298,7 @@ public class ManageController {
         }
         account.setUpdateDate(new Date());
         accountRepository.saveAndFlush(account);
-        return "redirect:/manage/main";
+        return "redirect:/manage/main?currentPage=1";
     }
 
     @GetMapping("deleteAccount")
@@ -273,10 +310,10 @@ public class ManageController {
             List<String> animalNames = animals.stream().map(Animal::getAnimalName).collect(Collectors.toList());
             String msg = String.format("该账号已经被%s引用，不可以删除",StringUtils.join(animalNames,","));
             model.addAttribute("msg",msg);
-            return main(model);
+            return main(1,model);
         }
         accountRepository.deleteById(id);
-        return "redirect:/manage/main";
+        return "redirect:/manage/main?currentPage=1";
     }
 
     @GetMapping("deleteAnimal")
@@ -289,16 +326,16 @@ public class ManageController {
             List<String> accountNames = accounts.stream().map(Account::getAccount).collect(Collectors.toList());
             String msg = String.format("该动物已经被%s引用，不可以删除",StringUtils.join(accountNames,","));
             model.addAttribute("msg",msg);
-            return animalList(model);
+            return animalList(1,model);
         }
         animalRepository.deleteById(id);
-        return "redirect:/manage/animalList";
+        return "redirect:/manage/animalList?currentPage=1";
     }
 
     @GetMapping("deleteRelation")
     public String deleteRelation(Integer id) {
         relationRepository.deleteById(id);
-        return "redirect:/manage/relationList";
+        return "redirect:/manage/relationList?currentPage=1";
     }
 
 
@@ -334,8 +371,7 @@ public class ManageController {
 
     public static String getStringDateFormat(Date date, String format) {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
-        String dateString = formatter.format(date);
-        return dateString;
+        return formatter.format(date);
     }
 
     public static Date parseDate(String dateStr, String pattern) {

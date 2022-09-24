@@ -50,6 +50,11 @@
             margin-left: 30px;
             margin-top: 30px;
         }
+        .page {
+            margin-bottom:30px;
+            margin-left: 60px;
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -58,7 +63,7 @@
 <div class="container-main right-panel-active">
 <!--    <div class="container_from container_signin">-->
     <div class="addAccount">
-        <a href="addAccountPage">新增账户</a> <a href="animalList" style="margin-left: 30px">动物管理</a> <a href="relationList" style="margin-left: 30px">授权管理</a>
+        <a href="addAccountPage">新增账户</a> <a href="animalList?currentPage=1" style="margin-left: 30px">动物管理</a> <a href="relationList?currentPage=1" style="margin-left: 30px">授权管理</a>
         <span th:text="${msg}" style=" margin-left: 30px; text-align:center;color: red"></span>
     </div>
     <div class="table-c">
@@ -76,7 +81,10 @@
             </tr>
             <tr th:each="account : ${accountList}">
                 <td th:width="50" th:text="${account.id}"></td>
-                <td th:width="100" th:text="${account.account}"></td>
+                <td th:width="100" >
+                    <a th:href="@{'/manage/relationList?currentPage=1&accountId=' + ${account.id}}" th:text="${account.account}">
+                    </a>
+                </td>
                 <td th:width="100" th:text="${account.userName}"></td>
                 <td th:width="150" th:text="${account.company}"></td>
                 <td th:width="100" th:text="${account.mobile}"></td>
@@ -87,7 +95,27 @@
             </tr>
         </table>
     </div>
-
+    <div class="page">
+        Total items: [[${totalItems}]] - Page [[${currentPage}]] of
+        [[${totalPages}]] &nbsp; &nbsp; <a th:if="${currentPage > 1}"
+                                           th:href="@{'/manage/main?currentPage=' + 1}">First</a>
+        <span th:unless="${currentPage > 1}">First</span> &nbsp;&nbsp; <a
+            th:if="${currentPage > 1}"
+            th:href="@{'/manage/main?currentPage=' + ${currentPage - 1}}">Previous</a>
+        <span th:unless="${currentPage > 1}">Previous</span> &nbsp;&nbsp; <span
+            th:each="i: ${#numbers.sequence(1, totalPages)}"> <a
+            th:if="${i != currentPage}"
+            th:href="@{'/manage/main?currentPage=' + ${i}}">[[${i}]]</a>
+				&nbsp; &nbsp; <span th:unless="${i != currentPage}">[[${i}]]</span>
+				&nbsp; &nbsp;
+			</span> <a th:if="${currentPage < totalPages}"
+                       th:href="@{'/manage/main?currentPage=' + ${currentPage + 1}}">Next</a>
+        <span th:unless="${currentPage < totalPages}">Next</span>
+        &nbsp;&nbsp; <a th:if="${currentPage < totalPages}"
+                        th:href="@{'/manage/main?currentPage=' + ${totalPages}}">Last</a>
+        <span th:unless="${currentPage < totalPages}">Last</span>
+        &nbsp;&nbsp;
+    </div>
 <!--    </div>-->
 </div>
 <!--记得要下载jquery-->

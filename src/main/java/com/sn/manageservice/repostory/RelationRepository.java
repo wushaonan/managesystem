@@ -2,6 +2,8 @@ package com.sn.manageservice.repostory;
 
 import com.sn.manageservice.pojo.Animal;
 import com.sn.manageservice.pojo.Relation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +22,10 @@ public interface RelationRepository extends JpaRepository<Relation, Integer> {
     List<Relation> findRelationByAnimalId(Integer animalId);
 
     List<Relation> findRelationByAccountId(Integer accountId);
+
+    Page<Relation> findRelationByAccountId(Pageable pageable, Integer accountId);
+
+    Page<Relation> findRelationByAnimalId(Pageable pageable, Integer animalId);
+
+
 }

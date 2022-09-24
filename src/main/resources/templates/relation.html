@@ -50,6 +50,11 @@
             margin-left: 30px;
             margin-top: 30px;
         }
+        .page {
+            margin-bottom:30px;
+            margin-left: 60px;
+            margin-top: 30px;
+        }
     </style>
 </head>
 <body>
@@ -58,7 +63,7 @@
 <div class="container-main right-panel-active">
 <!--    <div class="container_from container_signin">-->
     <div class="addAccount">
-        <a href="main" style="margin-left: 30px;margin-bottom: 30px">返回</a> <a style="margin-left: 30px;margin-bottom: 30px" href="addRelationPage">新增授权</a>
+        <a href="main?currentPage=1" style="margin-left: 30px;margin-bottom: 30px">返回</a> <a style="margin-left: 30px;margin-bottom: 30px" href="addRelationPage">新增授权</a>
     </div>
     <div class="table-c">
         <table  width="1100" border="0" cellspacing="1" cellpadding="0">
@@ -84,7 +89,32 @@
             </tr>
         </table>
     </div>
-
+    <div class="page">
+        Total items: [[${totalItems}]] - Page [[${currentPage}]] of
+        [[${totalPages}]] &nbsp; &nbsp; <a th:if="${currentPage > 1}"
+                                           th:href="@{'/manage/relationList?currentPage=' + 1 + ${accountId != null ? '&accountId=' + accountId : ''}
+                                           + ${animalId != null ? '&animalId=' + animalId : ''}}">First</a>
+        <span th:unless="${currentPage > 1}">First</span> &nbsp;&nbsp; <a
+            th:if="${currentPage > 1}"
+            th:href="@{'/manage/relationList?currentPage=' + ${currentPage - 1} + ${accountId != null ? '&accountId=' + accountId : ''}
+                                           + ${animalId != null ? '&animalId=' + animalId : ''}}">Previous</a>
+        <span th:unless="${currentPage > 1}">Previous</span> &nbsp;&nbsp; <span
+            th:each="i: ${#numbers.sequence(1, totalPages)}"> <a
+            th:if="${i != currentPage}"
+            th:href="@{'/manage/relationList?currentPage=' + ${i} + ${accountId != null ? '&accountId=' + accountId : ''}
+                                           + ${animalId != null ? '&animalId=' + animalId : ''}}">[[${i}]]</a>
+				&nbsp; &nbsp; <span th:unless="${i != currentPage}">[[${i}]]</span>
+				&nbsp; &nbsp;
+			</span> <a th:if="${currentPage < totalPages}"
+                       th:href="@{'/manage/relationList?currentPage=' + ${currentPage + 1} + ${accountId != null ? '&accountId=' + accountId : ''}
+                                           + ${animalId != null ? '&animalId=' + animalId : ''}}">Next</a>
+        <span th:unless="${currentPage < totalPages}">Next</span>
+        &nbsp;&nbsp; <a th:if="${currentPage < totalPages}"
+                        th:href="@{'/manage/relationList?currentPage=' + ${totalPages} + ${accountId != null ? '&accountId=' + accountId : ''}
+                                           + ${animalId != null ? '&animalId=' + animalId : ''}}">Last</a>
+        <span th:unless="${currentPage < totalPages}">Last</span>
+        &nbsp;&nbsp;
+    </div>
 <!--    </div>-->
 </div>
 <!--记得要下载jquery-->
