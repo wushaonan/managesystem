@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>动物管理</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            width: 800px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        ul li {
+            position: relative;
+            float: left;
+            list-style: none;
+            background-color: deepskyblue;
+            color: black;
+            box-shadow: 1px 2px 8px darkgrey;
+            width: 19.5%;
+        }
+
+        ul li a {
+            text-decoration: none;
+        }
+
+        ul li:hover {
+            background-color: skyblue;
+        }
+        .table-c table{
+            border-right:1px solid #0055ff;border-bottom:1px solid #0055ff;
+            margin:0 auto;
+        }
+        .table-c table td{border-left:1px solid #0055ff;border-top:1px solid #0055ff;
+            text-align: center
+        }
+        .table-c table th{border-left:1px solid #0055ff;border-top:1px solid #0055ff
+        }
+        .addAccount {
+            margin-bottom:30px;
+            margin-left: 30px;
+            margin-top: 30px;
+        }
+        .page {
+            margin-bottom:30px;
+            margin-left: 60px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!--<div class="table-c" >-->
+<div class="container-main right-panel-active">
+<!--    <div class="container_from container_signin">-->
+    <div class="addAccount">
+        <a href="main?currentPage=1" style="margin-left: 30px;margin-bottom: 30px">返回</a> <a style="margin-left: 30px;margin-bottom: 30px" href="addAnimalPage">新增动物</a>
+        <span th:text="${msg}" style=" margin-left: 30px; text-align:center;color: red"></span>
+    </div>
+    <div class="table-c">
+        <table  width="1100" border="0" cellspacing="1" cellpadding="0">
+            <tr>
+                <th th:width="50">ID</th>
+                <th th:width="100">动物名字</th>
+                <th th:width="100">创建时间</th>
+                <th th:width="150">更新时间</th>
+                <th th:width="100">操作</th>
+            </tr>
+            <tr th:each="animal : ${animalList}">
+                <td th:width="50" th:text="${animal.id}"></td>
+                <td th:width="50">
+                    <a th:href="@{'/manage/relationList?currentPage=1&animalId=' + ${animal.id}}" th:text="${animal.animalName}">
+                    </a>
+                </td>
+                <td th:width="100" th:text="${animal.createDate}"></td>
+                <td th:width="100" th:text="${animal.updateDate}"></td>
+                <td th:width="100"><a th:href="@{editAnimalPage(id=${animal.id})}">编辑</a> <a th:href="@{deleteAnimal(id=${animal.id})}" style="margin-left: 10px">删除</a></td>
+            </tr>
+        </table>
+    </div>
+    <div class="page">
+        Total items: [[${totalItems}]] - Page [[${currentPage}]] of
+        [[${totalPages}]] &nbsp; &nbsp; <a th:if="${currentPage > 1}"
+                                           th:href="@{'/manage/animalList?currentPage=' + 1}">First</a>
+        <span th:unless="${currentPage > 1}">First</span> &nbsp;&nbsp; <a
+            th:if="${currentPage > 1}"
+            th:href="@{'/manage/animalList?currentPage=' + ${currentPage - 1}}">Previous</a>
+        <span th:unless="${currentPage > 1}">Previous</span> &nbsp;&nbsp; <span
+            th:each="i: ${#numbers.sequence(1, totalPages)}"> <a
+            th:if="${i != currentPage}"
+            th:href="@{'/manage/animalList?currentPage=' + ${i}}">[[${i}]]</a>
+				&nbsp; &nbsp; <span th:unless="${i != currentPage}">[[${i}]]</span>
+				&nbsp; &nbsp;
+			</span> <a th:if="${currentPage < totalPages}"
+                       th:href="@{'/manage/animalList?currentPage=' + ${currentPage + 1}}">Next</a>
+        <span th:unless="${currentPage < totalPages}">Next</span>
+        &nbsp;&nbsp; <a th:if="${currentPage < totalPages}"
+                        th:href="@{'/manage/animalList?currentPage=' + ${totalPages}}">Last</a>
+        <span th:unless="${currentPage < totalPages}">Last</span>
+        &nbsp;&nbsp;
+    </div>
+<!--    </div>-->
+</div>
+<!--记得要下载jquery-->
+<script src="../static/jquery-3.6.0.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增授权</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .platformId {
+            background-color: #fff;
+            border: 1px solid white;
+            padding: 0.9rem 0.9rem;
+            margin: 0.5rem 0;
+            width: 100%;
+            border-radius: 20px;
+        }
+        select:focus {
+            outline: none;
+            border: 1px solid skyblue;
+        }
+        .addAccount {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<!-- 整体布局 -->
+<div class="container right-panel-active">
+
+    <div class="container_from container_signin">
+        <div class="addAccount">
+            <a href="relationList?currentPage=1" style="margin-left: 30px;">返回</a>
+            <span th:text="${msg}" style=" margin-left: 30px; text-align:center;color: red"></span>
+        </div>
+        <form class="from" id="from2" method="post" th:action="@{/manage/addOrEditRelation}">
+            <label>账号名称</label>
+            <select class="platformId" name="accountId" required>
+                <option value="">请选择账号</option>
+                <option th:selected="${relation.accountId eq accountDo.id}"
+                        th:each="accountDo : ${accountDoList}"
+                        th:value="${accountDo.id}"
+                        th:text="${accountDo.account}">
+                </option>
+            </select>
+            <label>动物名字</label>
+            <select class="platformId" name="animalId" required>
+                <option value="">请选择动物</option>
+                <option th:selected="${relation.animalId eq animalDo.id}"
+                        th:each="animalDo : ${animalDoList}"
+                        th:value="${animalDo.id}"
+                        th:text="${animalDo.animalName}">
+                </option>
+            </select>
+<!--            <label>动物名字</label>-->
+<!--            <th:block th:each="animalDo:${animalDoList}">-->
+<!--                <input th:id="'animal_' + ${animalDo.id}" name="animalList" type="checkbox"-->
+<!--                       th:value="${animalDo.id}" th:checked="${#lists.contains(animalDoList, animalDo.id)}"-->
+<!--                        >-->
+<!--                <label th:for="'animal_' + ${animalDo.id}" th:text="${animalDo.animalName}"></label>-->
+<!--            </th:block>-->
+            <label>开始时间</label>
+            <input type="date" name="startDate" placeholder="请输入开始时间"  th:value ="${relation.startDate}" class="input" required="required">
+            <label>结束时间</label>
+            <input type="date" name="endDate" placeholder="请输入结束时间"  th:value ="${relation.endDate}" class="input" required="required">
+            <input type="submit" class="btn" value="保存"/>
+        </form>
+    </div>
+</div>
+</body>
+</html>
