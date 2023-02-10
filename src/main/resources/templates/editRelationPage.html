@@ -29,7 +29,7 @@
 
     <div class="container_from container_signin">
         <div class="addAccount">
-            <a href="relationList" style="margin-left: 30px;">返回</a>
+            <a href="relationList?currentPage=1" style="margin-left: 30px;">返回</a>
             <span th:text="${msg}" style=" margin-left: 30px; text-align:center;color: red"></span>
         </div>
         <form class="from" id="from2" method="post" th:action="@{/manage/addOrEditRelation}">
