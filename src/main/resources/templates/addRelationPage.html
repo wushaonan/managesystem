@@ -51,13 +51,6 @@
                         th:text="${animalDo.animalName}">
                 </option>
             </select>
-<!--            <label>动物名字</label>-->
-<!--            <th:block th:each="animalDo:${animalDoList}">-->
-<!--                <input th:id="'animal_' + ${animalDo.id}" name="animalList" type="checkbox"-->
-<!--                       th:value="${animalDo.id}" th:checked="${#lists.contains(animalDoList, animalDo.id)}"-->
-<!--                        >-->
-<!--                <label th:for="'animal_' + ${animalDo.id}" th:text="${animalDo.animalName}"></label>-->
-<!--            </th:block>-->
             <label>开始时间</label>
             <input type="date" name="startDate" placeholder="请输入开始时间"  th:value ="${relation.startDate}" class="input" required="required">
             <label>结束时间</label>

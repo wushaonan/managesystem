@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/test")
 @Slf4j
 public class TestController {
-//    private static Logger log = Logger.getLogger(TestController.class.getClass());
-
     @RequestMapping(value = "api",method = RequestMethod.GET)
     @ResponseBody
     public String testApi(){
