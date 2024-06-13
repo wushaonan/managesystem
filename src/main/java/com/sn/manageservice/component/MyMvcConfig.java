@@ -2,6 +2,7 @@ package com.sn.manageservice.component;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -26,6 +27,15 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
 //                .excludePathPatterns("/index.html","/","/user/login","/webjars/**","/**/*.css", "/**/*.js");
 //    }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")  // 拦截所有的请求
+                .allowedOriginPatterns("*")  // 可跨域的域名，可以为 *
+                .allowCredentials(true)
+                .allowedMethods("*")   // 允许跨域的方法，可以单独配置
+                .allowedHeaders("*");  // 允许跨域的请求头，可以单独配置
+    }
+
     //使用WebMvcConfigurerAdapter来扩展SpringMVC的功能
     //所有的WebMvcConfigurerAdapter都会生效
     //注意要写在标有@Configuration的类中，要在方法上标上@Bean注解
@@ -45,7 +55,7 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
                 registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-                        .excludePathPatterns("/index.html","/","/manage/login","/manage/appLogin","/webjars/**","/**/*.css", "/**/*.js");
+                        .excludePathPatterns("/index.html","/","/manage/login","/manage/appLogin","/rest/manage/login","/webjars/**","/**/*.css", "/**/*.js");
             }
         };
         return webMvcConfigurerAdapter;

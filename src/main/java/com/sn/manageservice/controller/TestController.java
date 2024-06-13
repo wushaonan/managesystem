@@ -1,9 +1,27 @@
 package com.sn.manageservice.controller;
 
+import com.sun.mail.pop3.POP3Folder;
+import com.sun.mail.pop3.POP3Store;
+import com.sun.mail.util.MailSSLSocketFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
+import javax.mail.search.FlagTerm;
+import java.io.*;
+import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
 
 /**
  * @author 向南
@@ -14,17 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/test")
 @Slf4j
 public class TestController {
-    @RequestMapping(value = "api",method = RequestMethod.GET)
-    @ResponseBody
-    public String testApi(){
-        log.info("sass:{}","ss");
-        return "hello world";
-    }
-    @GetMapping(value = "/hello")
-    public String hello(Model model) {
-        String name = "jiangbei";
-        model.addAttribute("name", name);
-        return "hello";
-    }
+//    private static Logger log = Logger.getLogger(TestController.class.getClass());
+
 
 }

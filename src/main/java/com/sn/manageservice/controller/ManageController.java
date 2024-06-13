@@ -121,7 +121,7 @@ public class ManageController {
     @GetMapping("/main")
     public String main(Integer currentPage, Model model) {
 
-        Pageable pageable = PageRequest.of(currentPage - 1, 2, Sort.Direction.DESC, "updateDate");
+        Pageable pageable = PageRequest.of(currentPage - 1, 10, Sort.Direction.DESC, "updateDate");
         Page<Account> accountPage = accountRepository.findAll(pageable);
         List<Account> accounts = accountPage.getContent();
         List<AccountVo> accountVos = new ArrayList<>();
@@ -142,7 +142,7 @@ public class ManageController {
 
     @GetMapping("animalList")
     public String animalList(Integer currentPage, Model model) {
-        Pageable pageable = PageRequest.of(currentPage - 1, 2, Sort.Direction.DESC, "updateDate");
+        Pageable pageable = PageRequest.of(currentPage - 1, 10, Sort.Direction.DESC, "updateDate");
         Page<Animal> animalPage = animalRepository.findAll(pageable);
         List<Animal> animals = animalPage.getContent();
         List<AnimalVo> animalVos = new ArrayList<>();
@@ -164,7 +164,7 @@ public class ManageController {
 
     @GetMapping("relationList")
     public String relationList(Integer currentPage, Integer accountId, Integer animalId, Model model) {
-        Pageable pageable = PageRequest.of(currentPage - 1, 2, Sort.Direction.DESC, "updateDate");
+        Pageable pageable = PageRequest.of(currentPage - 1, 10, Sort.Direction.DESC, "updateDate");
         Page<Relation> relationPage = null;
         if (Objects.nonNull(accountId)){
             model.addAttribute("accountId", accountId);
